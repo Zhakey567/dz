@@ -1,0 +1,24 @@
+@page
+@model dz.Pages.CreateModel
+
+@{
+    Layout = "Shared/_Layout";
+}
+
+<h2>Добавление нового задания</h2>
+<form method="post">
+    <p>
+        <label>Номер класс</label><br/>
+        <input name="classId"/>
+    </p>
+    <p>
+        <label>Заголовок</label><br />
+        <input name="subject" />
+    </p>
+    <p>
+        <label>Описание</label><br />
+        <input name="message" />
+    </p>
+   
+    <input type="submit" value="Отправить" />
+</form>

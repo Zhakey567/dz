@@ -1,0 +1,22 @@
+@page
+@model dz.Pages.LoginModel
+
+@{
+    Layout = "_Layout";
+}
+
+
+<div>
+    <h2 class="display-4"> Login Form</h2>
+    <form method='post'>
+        <p>
+            <label class="nav-link text-dark">Email</label><br />
+            <input class="nav-link text-dark" name='email' />
+        </p>
+        <p>
+            <label class="nav-link text-dark">Password</label><br />
+            <input class="nav-link text-dark" type='password' name='password' />
+        </p>
+        <input class="nav-link text-dark" type='submit' value='Login' />
+    </form>
+</div>

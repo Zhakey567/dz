@@ -1,0 +1,56 @@
+@page
+@model dz.Pages.TaskModel
+
+@{
+    Layout = "_Layout";
+}
+
+
+
+<h2>Your Homework</h2>
+
+
+@foreach (var homework in Model.HomeworkList)
+{
+    <div style="margin-bottom: 20px; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+        <a style="font-weight: bold;">Заголовок: @homework.Subject</a><br>
+        <a>Дата отправки @homework.Datetime.ToString("dd-MM-yyyy")</a>
+        <p>
+            Описание:
+            @if (homework.Message.Length > 100)
+            {
+                var str = @homework.Message;
+                while (str.Length > 100)
+                {
+                    <a>@str.Substring(0, 100)</a>
+                    str = str.Substring(100);
+                }
+                
+                <a>@str</a>
+
+                @homework.Message.Substring(0, 100)
+            }
+            else
+            {
+                @homework.Message
+            }
+        </p>
+    </div>
+
+    <div class="modal fade" id="homeworkModal-@homework.Id" tabindex="-1" aria-labelledby="homeworkModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="homeworkModalLabel">@homework.Subject</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    @homework.Message
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
