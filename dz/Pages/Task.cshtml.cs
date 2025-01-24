@@ -1,10 +1,11 @@
 using System.Security.Claims;
 using dz.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 
 namespace dz.Pages;
-
+[Authorize(Roles = "student")]
 public class TaskModel : PageModel
 {
     private readonly ApplicationDbContext _context;

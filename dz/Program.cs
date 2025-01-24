@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using dz.Data;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace dz;
@@ -22,24 +23,31 @@ public class Program
         builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
             .AddEntityFrameworkStores<ApplicationDbContext>();
         builder.Services.AddRazorPages();
-        
-        // builder.Services.AddAuthentication("Cookies")
-        //     .AddCookie(options =>
-        //     {
-        //         options.LoginPath = "/Login"; // Путь к странице логина
-        //         options.LogoutPath = "/Logout"; // Путь для выхода
-        //     });
+
+
         builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-            .AddCookie(options => 
+            .AddCookie(options =>
             {
                 options.LoginPath = "/Login";
                 options.LogoutPath = "/Logout";
             });
-        builder.Services.AddAuthorization();
+        // builder.Services.AddAuthorization();
+        builder.Services.AddAuthorization(options =>
+        {
+            options.FallbackPolicy = new AuthorizationPolicyBuilder()
+                .RequireAuthenticatedUser()
+                .Build();
+        });
+        builder.Services.ConfigureApplicationCookie(options =>
+        {
+            options.AccessDeniedPath = "/AccessDenied"; // Страница отказа в доступе
+        });
+
+        
         
         var app = builder.Build();
 
-        // Configure the HTTP request pipeline.
+ 
         if (app.Environment.IsDevelopment())
         {
             app.UseMigrationsEndPoint();
@@ -47,7 +55,7 @@ public class Program
         else
         {
             app.UseExceptionHandler("/Error");
-            // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+           
             app.UseHsts();
         }
 
@@ -56,7 +64,7 @@ public class Program
 
         app.UseRouting();
 
-        app.UseAuthentication();     
+        app.UseAuthentication();
         app.UseAuthorization();
         app.MapRazorPages();
 

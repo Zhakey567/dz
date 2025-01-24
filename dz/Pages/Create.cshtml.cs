@@ -1,5 +1,6 @@
 using dz.Data;
 using MailKit.Net.Smtp;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -7,6 +8,7 @@ using MimeKit;
 
 namespace dz.Pages;
 
+[Authorize(Roles = "teacher")]
 [IgnoreAntiforgeryToken]
 public class CreateModel : PageModel
 {
@@ -16,6 +18,24 @@ public class CreateModel : PageModel
     public CreateModel(ApplicationDbContext db)
     {
         context = db;
+    }
+    public List<int> Cour { get; set; }
+
+    public async Task OnGetAsync()
+    {
+        Cour = new List<int>();
+        var email = User.Identity.Name;
+        var student = await context.Students
+            .FirstOrDefaultAsync(s => s.Email == email);
+
+        var classes = await context.Courses
+            .Where(h => h.TeacherId == student.Id)
+            .ToListAsync();
+
+        foreach (var cla in classes)
+        {
+            Cour.Add(cla.ClassId);
+        }
     }
     public async Task<IActionResult> OnPostAsync()
     {

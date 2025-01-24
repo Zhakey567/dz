@@ -8,8 +8,13 @@
 <h2>Добавление нового задания</h2>
 <form method="post">
     <p>
-        <label>Номер класс</label><br/>
-        <input name="classId"/>
+        <label for="ClassId">Выберете класс</label>
+        <select id="classId" name="classId">
+            @foreach (var i in @Model.Cour)
+            {
+            <option value="@i">@i</option>
+            }
+        </select>
     </p>
     <p>
         <label>Заголовок</label><br />

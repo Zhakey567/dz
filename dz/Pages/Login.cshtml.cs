@@ -3,13 +3,14 @@ using System.Security.Claims;
 using dz.Data;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 
 namespace dz.Pages;
-
+[AllowAnonymous]
 public class LoginModel : PageModel
 {
     [BindProperty] public InputModel Input { get; set; }
@@ -21,13 +22,17 @@ public class LoginModel : PageModel
         context = db;
     }
 
-    public void OnGet()
+    [AllowAnonymous]
+    public IActionResult OnGet()
     {
-        if (User.Identity?.IsAuthenticated == true)
+        if (User.Identity.IsAuthenticated)
         {
-            RedirectToPage("/Index");
+            return RedirectToPage("/Index"); 
         }
+
+        return Page();
     }
+  
 
     public async Task<IActionResult> OnPostAsync()
     {
